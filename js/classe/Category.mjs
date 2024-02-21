@@ -1,4 +1,4 @@
-class Category {
+export class Category {
     static idCounter = 1;
 
     constructor(name) {

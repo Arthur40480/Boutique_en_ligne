@@ -1,0 +1,12 @@
+{
+  "name": "application_shop",
+  "version": "1.0.0",
+  "description": "Application de vente de vêtement",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Arthur Gibert",
+  "license": "ISC"
+}

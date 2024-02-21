@@ -1,4 +1,4 @@
-class Article {
+export class Article {
     static idCounter = 1;
 
     constructor(name, price, category, imgSrc) {
@@ -6,7 +6,7 @@ class Article {
         this._name = name;
         this._price = price;
         this._category = category;
-        this._imgSrc = imgSrc;
+        this._imgSrc = `../assets/${imgSrc}`;
     }
 
     get id() {
