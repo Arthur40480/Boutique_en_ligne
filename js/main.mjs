@@ -15,6 +15,12 @@ function displayCategories(categories) {
         categoryElt.classList.add("cursor-pointer");
         categoryElt.textContent = category.name;
         categoriesContainerElt.appendChild(categoryElt);
+        //Evenement pour afficher les articles d'une catégorie
+        categoryElt.addEventListener('click', () => {
+            articlesContainerElt.innerHTML = '';
+            const filteredArticles = articles.filter(article => article.category.name === category.name);
+            displayArticles(filteredArticles);
+        } )
     });
 };
 
@@ -101,4 +107,4 @@ function displayArticles(articles) {
 }
 
 displayCategories(categories);
-displayArticles(articles)
+displayArticles(articles);
