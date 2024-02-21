@@ -10,7 +10,7 @@ const categoryJeans = new Category("Jeans");
 const categoryShorts = new Category("Shorts");
 const categoryShoes = new Category("Shoes");
 
-const categories = [categoryTShirt, categorySweat, categoryJacket, categoryPants, categoryJeans, categoryShorts, categoryShoes];
+export const categories = [categoryTShirt, categorySweat, categoryJacket, categoryPants, categoryJeans, categoryShorts, categoryShoes];
 
 // Articles:
 const tShirt1 = new Article("T-shirt manche longue", 35, categoryTShirt, "tShirt1.jpg");
@@ -25,7 +25,7 @@ const shorts1 = new Article("Short en jeans", 42, categoryShorts, "shorts1.jpg")
 const shorts2 = new Article("Short de boxe", 30, categoryShorts, "shorts2.jpg");
 const shoes1 = new Article("Chaussure à talon", 115, categoryShoes, "shoes1.jpg");
 
-const articles = [
+export const articles = [
     tShirt1,
     tShirt2,
     sweat1,
@@ -39,4 +39,3 @@ const articles = [
     shoes1
 ];
 
-export {categories, articles};
