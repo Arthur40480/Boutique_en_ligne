@@ -19,7 +19,7 @@
 								<li class="mr-10 hover:text-indigo-500"><a href="">Promotions</a></li>
                 <li class="mr-10 hover:text-indigo-500"><a href="">Contact</a></li>         
             </ul>
-						<button class="absolute right-10">
+						<button class="open-cart absolute right-10">
 							<img class="h-8 filter invert hover:scale-125 duration-500" src="/assets/cart.png" alt="Logo de panier">
 						</button>
         </nav>
@@ -47,7 +47,7 @@
 					</div>
 				</section>		
 				<!--CART-->
-        <div class="relative z-10 translate-x-0" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+        <div class="cart-container relative z-10 translate-x-0" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
             <!--
                 Background backdrop, show/hide based on slide-over state.
           
@@ -77,9 +77,9 @@
                     <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                       <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                         <div class="flex items-start justify-between">
-                          <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">Shopping cart</h2>
+                          <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">Panier</h2>
                           <div class="ml-3 flex h-7 items-center">
-                            <button type="button" class="relative -m-2 p-2 text-gray-400 hover:text-gray-500">
+                            <button type="button" class="close-cart relative -m-2 p-2 text-gray-400 hover:text-gray-500">
                               <span class="absolute -inset-0.5"></span>
                               <span class="sr-only">Close panel</span>
                               <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -91,10 +91,10 @@
           
                         <div class="mt-8">
                           <div class="flow-root">
-                            <ul role="list" class="-my-6 divide-y divide-gray-200">
+                            <ul role="list" class="cart-article-container -my-6 divide-y divide-gray-200">
                               <li class="flex py-6">
                                 <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                  <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="h-full w-full object-cover object-center">
+                                  <img src="./assets/jacket1.jpg" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="h-full w-full object-cover object-center">
                                 </div>
           
                                 <div class="ml-4 flex flex-1 flex-col">
@@ -153,13 +153,13 @@
                         </div>
                         <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                         <div class="mt-6">
-                          <a href="#" class="flex items-center justify-center rounded-md border border-transparent bg-blue-500 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">Checkout</a>
+                          <a href="#" class="flex items-center justify-center rounded-md border border-transparent bg-blue-500 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">Valider</a>
                         </div>
                         <div class="mt-6 flex justify-center text-center text-sm text-gray-500">
                           <p>
                             or
                             <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">
-                              Continue Shopping
+                              Continuer vos achats
                               <span aria-hidden="true"> &rarr;</span>
                             </button>
                           </p>

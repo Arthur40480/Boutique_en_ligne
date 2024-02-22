@@ -1,7 +1,12 @@
 import { categories, articles } from "./data.mjs";
 
-const categoriesContainerElt = document.getElementsByClassName('categories-container')[0];
-const articlesContainerElt = document.getElementsByClassName('articles-container')[0];
+const categoriesContainerElt = document.getElementsByClassName("categories-container")[0];
+const articlesContainerElt = document.getElementsByClassName("articles-container")[0];
+const cartContainerElt = document.getElementsByClassName("cart-container")[0];
+const cartArticleListElt = document.getElementsByClassName("cart-article-container")[0];
+const buttonOpenCartElt = document.getElementsByClassName("open-cart")[0];
+const buttonCloseCartElt = document.getElementsByClassName("close-cart")[0];
+const cartArticles = [];
 
 /**
  * Affiche les catégories
@@ -9,14 +14,13 @@ const articlesContainerElt = document.getElementsByClassName('articles-container
  */
 function displayCategories(categories) {
     categories.forEach(category => {
-        const categoryElt = document.createElement('div');
+        const categoryElt = document.createElement("div");
         categoryElt.classList.add("category");
         categoryElt.classList.add("hover:bg-blue-500");
         categoryElt.classList.add("cursor-pointer");
         categoryElt.textContent = category.name;
         categoriesContainerElt.appendChild(categoryElt);
-        //Evenement pour afficher les articles d'une catégorie
-        categoryElt.addEventListener('click', () => {
+        categoryElt.addEventListener("click", () => {
             articlesContainerElt.innerHTML = '';
             const filteredArticles = articles.filter(article => article.category.name === category.name);
             displayArticles(filteredArticles);
@@ -36,7 +40,7 @@ function createImageArticleElt(src, alt) {
     imgElt.setAttribute("src", src);
     imgElt.setAttribute("alt", alt);
     return imgElt;
-}
+};
 
 /**
  * Crée un élément p avec le texte spécifié
@@ -48,7 +52,7 @@ function createParagraphArticleElt(text) {
     idElt.textContent = text;
     idElt.classList.add("mt-1", "font-bold");
     return idElt;
-}
+};
 
 /**
  * Crée un élément de titre avec le nom de l'article
@@ -60,7 +64,7 @@ function createNameArticleElt(name) {
     nameElt.textContent = name;
     nameElt.classList.add("mt-1");
     return nameElt;
-}
+};
 
 /**
  * Crée un bouton pour l'ajout d'un article au panier
@@ -75,7 +79,7 @@ function createButtonAddToCartElt() {
     imgButtonElt.setAttribute("alt", "Incon de panier");
     buttonElt.appendChild(imgButtonElt);
     return buttonElt;
-}
+};
 
 /**
  * Affiche les articles
@@ -103,8 +107,58 @@ function displayArticles(articles) {
         cardArticleElt.appendChild(priceArticleElt);
         cardArticleElt.appendChild(buttonAddToCartElt);
         articlesContainerElt.appendChild(cardArticleElt);
-    })
-}
+    });
+};
 
 displayCategories(categories);
 displayArticles(articles);
+
+buttonOpenCartElt.addEventListener("click", displayCart);
+buttonCloseCartElt.addEventListener("click", closeCart);
+
+/**
+ * Affiche le panier
+ */
+function displayCart() {
+    cartContainerElt.classList.remove("translate-x-0");
+};
+
+/**
+ * Ferme le panier
+ */
+function closeCart() {
+    cartContainerElt.classList.add("translate-x-0");
+};
+
+/**
+ * Affiche les articles ajouter dans le panier
+ * @param {Array} articles - Tableau des articles dans le panier
+ */
+function displayArticleInCart(articles) {
+    articles.forEach(article => {
+        cartArticleListElt.innerHTML += `<li id=${article.id} class="flex py-6">
+        <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+            <img src="./assets/jacket1.jpg" alt="Illustration de l'article ${article.name}" class="h-full w-full object-cover object-center">
+        </div>
+        <div class="ml-4 flex flex-1 flex-col">
+            <div>
+                <div class="flex justify-between text-base font-medium text-gray-900">
+                    <h3>
+                        <a href="#">${article.name}</a>
+                    </h3>
+                    <p class="ml-4">${article.price}€</p>
+                </div>
+                <p class="mt-1 text-sm text-gray-500">Id: ${article.id}</p>
+            </div>
+            <div class="flex flex-1 items-end justify-between text-sm">
+                <p class="text-gray-500">Qty ${article.quantity}</p>
+                <div class="flex">
+                    <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Supprimer</button>
+                </div>
+            </div>
+        </div>
+        </li>`
+    });
+}
+
+displayArticleInCart(articles);

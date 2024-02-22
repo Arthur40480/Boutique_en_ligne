@@ -7,6 +7,7 @@ export class Article {
         this._price = price;
         this._category = category;
         this._imgSrc = `../assets/${imgSrc}`;
+        this._quantity = 1;
     }
 
     get id() {
@@ -29,6 +30,10 @@ export class Article {
         return this._imgSrc;
     }
 
+    get quantity() {
+        return this._quantity;
+    }
+
     set name(v) {
         this._name = v;
     }
@@ -43,6 +48,10 @@ export class Article {
 
     set imgSrc(v) {
         this._imgSrc = v;
+    }
+
+    set quantity(v) {
+        this._quantity = v
     }
 }
 
