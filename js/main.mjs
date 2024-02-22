@@ -209,7 +209,7 @@ function displayArticleInCart(articles) {
         const listItem = document.createElement('li');
         listItem.id = article.id;
         listItem.classList.add('flex', 'py-6');
-        listItem.innerHTML = `
+        listItem.innerHTML += `
             <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                 <img src="./assets/jacket1.jpg" alt="Illustration de l'article ${article.name}" class="h-full w-full object-cover object-center">
             </div>

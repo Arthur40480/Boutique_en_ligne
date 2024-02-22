@@ -1,11 +1,3 @@
-/* .container {
-    /* width: 100%;
-    overflow-x: auto;
-    white-space: nowrap;
-    position: relative; 
-    animation: scrollAnimation 10s linear infinite;  
-} */
-
 .categories {
     display: inline-block;
 } 
@@ -34,7 +26,27 @@
     outline: none;
 }
 
-@keyframes scrollAnimation {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); } /* Déplacer complètement vers la gauche */
+.order-summary {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    display: block;
+    z-index: 9999; 
+}
+
+.ordered-items-list {
+    max-height: 120px; /* Définir une hauteur maximale pour la liste */
+    overflow-y: auto;
+}
+
+input {
+    border: solid 2px blue;
+}
+
+.customer-details-form:focus-within label {
+    border-color: blue;
 }
