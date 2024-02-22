@@ -6,6 +6,7 @@ const cartContainerElt = document.getElementsByClassName("cart-container")[0];
 const cartArticleListElt = document.getElementsByClassName("cart-article-container")[0];
 const buttonOpenCartElt = document.getElementsByClassName("open-cart")[0];
 const buttonCloseCartElt = document.getElementsByClassName("close-cart")[0];
+const cartPriceElt = document.getElementsByClassName("total-price-container")[0];
 const cartArticles = [];
 
 /**
@@ -27,6 +28,8 @@ function displayCategories(categories) {
         } )
     });
 };
+
+displayCategories(categories);
 
 /**
  * Crée un élément image avec les attributs spécifiés
@@ -70,7 +73,7 @@ function createNameArticleElt(name) {
  * Crée un bouton pour l'ajout d'un article au panier
  * @returns {HTMLButtonElement} - L'élément du bouton créé
  */
-function createButtonAddToCartElt() {
+function createButtonAddToCartElt(article) {
     const buttonElt = document.createElement("button");
     buttonElt.classList.add("h-10", "w-12", "mt-1", "bg-blue-500", "rounded-md", "px-3", "py-1", "text-white", "font-bold", "hover:bg-indigo-700");
     const imgButtonElt = document.createElement("img");
@@ -78,6 +81,7 @@ function createButtonAddToCartElt() {
     imgButtonElt.setAttribute("src", "/assets/addCart.png");
     imgButtonElt.setAttribute("alt", "Incon de panier");
     buttonElt.appendChild(imgButtonElt);
+    buttonElt.addEventListener("click", () => addToCart(article));
     return buttonElt;
 };
 
@@ -94,11 +98,10 @@ function displayArticles(articles) {
         const idArticleElt = createParagraphArticleElt("ID: " + article.id);
         const nameArticleElt = createNameArticleElt(article.name);
         const priceArticleElt = createParagraphArticleElt(article.price + "€");
-        const buttonAddToCartElt = createButtonAddToCartElt();
+        const buttonAddToCartElt = createButtonAddToCartElt(article);
     
-        const cardArticleElt = document.createElement("a");
+        const cardArticleElt = document.createElement("div");
         cardArticleElt.classList.add("group");
-        cardArticleElt.setAttribute("href", "#");
 
         containerImgElt.appendChild(imgArticleElt);
         cardArticleElt.appendChild(containerImgElt);
@@ -110,7 +113,6 @@ function displayArticles(articles) {
     });
 };
 
-displayCategories(categories);
 displayArticles(articles);
 
 buttonOpenCartElt.addEventListener("click", displayCart);
@@ -131,34 +133,108 @@ function closeCart() {
 };
 
 /**
+ * Ajoute un article dans le panier
+ * @param {Object} article - Article à ajouter
+ */
+function addToCart(article) {
+    const existingArticleInCart = cartArticles.find(articles => articles.id == article.id);
+    if(existingArticleInCart) {
+        existingArticleInCart.quantity += 1;
+        console.log("Quantité de l'article mise à jour dans le panier :", existingArticleInCart.quantity);
+        updateCart(cartArticles);
+        displayCart();
+    }else {
+        cartArticles.push(article);
+        console.log("Article ajouté au panier :", article);
+        updateCart(cartArticles);
+        displayCart();
+    }
+};
+
+/**
+ * Supprime un article du panier
+ * @param {Object} article - Article à supprimer
+ */
+function removeToCart(article) {
+    const index = cartArticles.indexOf(article);
+    if (index !== -1) {
+        cartArticles.splice(index, 1);
+        console.log("Article retiré du panier :", article);
+        updateCart(cartArticles);
+    }
+};
+
+/**
+ * Met à jour le panier
+ * @param {Array} articles - Tableau des articles dans le panier
+ */
+function updateCart(articles) {
+    cartArticleListElt.innerHTML = ``;
+    calculateTotalCost(articles);
+    displayArticleInCart(articles);
+};
+
+/**
+ * Calcule le coût total du panier
+ * @param {Array} articles - Tableau des articles dans le panier
+ */
+function calculateTotalCost(articles) {
+    let total = 0;
+    articles.forEach(article => {
+        console.log("prix:" + article.price + " Quantity:" + article.quantity);
+        total = total + (article.price * article.quantity);
+    });
+    cartPriceElt.innerHTML = total + "€";
+};
+
+/**
+ * Crée un bouton pour la suppression d'un article au panier
+ * @param {Object} article - Article à supprimer
+ * @returns {HTMLButtonElement} - L'élément du bouton créé
+ */
+function createButtonRemoveToCartElt(article) {
+    const buttonElt = document.createElement("button");
+    buttonElt.classList.add("font-medium", "text-indigo-600", "hover:text-indigo-500");
+    buttonElt.innerHTML = "Supprimer";
+    buttonElt.addEventListener("click", () => removeToCart(article));
+    return buttonElt;
+};
+
+/**
  * Affiche les articles ajouter dans le panier
  * @param {Array} articles - Tableau des articles dans le panier
  */
 function displayArticleInCart(articles) {
     articles.forEach(article => {
-        cartArticleListElt.innerHTML += `<li id=${article.id} class="flex py-6">
-        <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-            <img src="./assets/jacket1.jpg" alt="Illustration de l'article ${article.name}" class="h-full w-full object-cover object-center">
-        </div>
-        <div class="ml-4 flex flex-1 flex-col">
-            <div>
-                <div class="flex justify-between text-base font-medium text-gray-900">
-                    <h3>
-                        <a href="#">${article.name}</a>
-                    </h3>
-                    <p class="ml-4">${article.price}€</p>
-                </div>
-                <p class="mt-1 text-sm text-gray-500">Id: ${article.id}</p>
+        const listItem = document.createElement('li');
+        listItem.id = article.id;
+        listItem.classList.add('flex', 'py-6');
+        listItem.innerHTML = `
+            <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                <img src="./assets/jacket1.jpg" alt="Illustration de l'article ${article.name}" class="h-full w-full object-cover object-center">
             </div>
-            <div class="flex flex-1 items-end justify-between text-sm">
-                <p class="text-gray-500">Qty ${article.quantity}</p>
-                <div class="flex">
-                    <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Supprimer</button>
+            <div class="ml-4 flex flex-1 flex-col">
+                <div>
+                    <div class="flex justify-between text-base font-medium text-gray-900">
+                        <h3>
+                            <a href="#">${article.name}</a>
+                        </h3>
+                        <p class="ml-4">${article.price}€</p>
+                    </div>
+                    <p class="mt-1 text-sm text-gray-500">Id: ${article.id}</p>
                 </div>
-            </div>
-        </div>
-        </li>`
+                <div class="flex flex-1 items-end justify-between text-sm">
+                    <p class="text-gray-500">Qty ${article.quantity}</p>
+                    <div class="delete-btn-container-${article.id} flex">
+                    <!-- BOUTTON SUPPRIMER -->
+                    </div>
+                </div>
+            </div>`;
+
+        const deleteButton = createButtonRemoveToCartElt(article);
+        const deleteButtonContainer = listItem.querySelector(`.delete-btn-container-${article.id}`);
+        deleteButtonContainer.appendChild(deleteButton);
+
+        cartArticleListElt.appendChild(listItem);
     });
 }
-
-displayArticleInCart(articles);
