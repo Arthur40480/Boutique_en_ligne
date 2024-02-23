@@ -1,4 +1,5 @@
 import { categories, articles } from "./data.mjs";
+import { Article, Category, Order, Customer } from "./Model.mjs";
 
 const categoriesContainerElt = document.getElementsByClassName("categories-container")[0];
 const articlesContainerElt = document.getElementsByClassName("articles-container")[0];
@@ -7,7 +8,14 @@ const cartArticleListElt = document.getElementsByClassName("cart-article-contain
 const buttonOpenCartElt = document.getElementsByClassName("open-cart")[0];
 const buttonCloseCartElt = document.getElementsByClassName("close-cart")[0];
 const cartPriceElt = document.getElementsByClassName("total-price-container")[0];
-const cartArticles = [];
+const orderSummaryElt = document.getElementsByClassName("order-summary")[0];
+const orderSummaryListElt = document.getElementsByClassName("ordered-items-list")[0];
+const validateCartElt = document.getElementsByClassName("validate-cart")[0];
+const paymentOrderButtonElt = document.getElementsByClassName("payment-order-button")[0];
+const cancelOrderButtonElt = document.getElementsByClassName("cancel-order-button")[0];
+let cartArticles = [];
+let orderList = [];
+let customerList = [];
 
 /**
  * Affiche les catégories
@@ -114,7 +122,6 @@ function displayArticles(articles) {
 };
 
 displayArticles(articles);
-
 buttonOpenCartElt.addEventListener("click", displayCart);
 buttonCloseCartElt.addEventListener("click", closeCart);
 
@@ -170,21 +177,33 @@ function removeToCart(article) {
  */
 function updateCart(articles) {
     cartArticleListElt.innerHTML = ``;
-    calculateTotalCost(articles);
+    cartPriceElt.innerHTML = calculateTotalCost(articles) + "€";
     displayArticleInCart(articles);
+};
+
+/**
+ * Vide le panier
+ */
+function clearCart() {
+    cartArticles = [];
+    updateCart(cartArticles);
 };
 
 /**
  * Calcule le coût total du panier
  * @param {Array} articles - Tableau des articles dans le panier
+ * @returns {Number} - Coût total
  */
 function calculateTotalCost(articles) {
     let total = 0;
-    articles.forEach(article => {
-        console.log("prix:" + article.price + " Quantity:" + article.quantity);
-        total = total + (article.price * article.quantity);
-    });
-    cartPriceElt.innerHTML = total + "€";
+    if(!articles.length > 0) {
+        return total;
+    }else {
+        articles.forEach(article => {
+            total = total + (article.price * article.quantity);
+        });
+        return total;
+    }
 };
 
 /**
@@ -224,7 +243,7 @@ function displayArticleInCart(articles) {
                     <p class="mt-1 text-sm text-gray-500">Id: ${article.id}</p>
                 </div>
                 <div class="flex flex-1 items-end justify-between text-sm">
-                    <p class="text-gray-500">Qty ${article.quantity}</p>
+                    <p class="font-bold">Qty ${article.quantity}</p>
                     <div class="delete-btn-container-${article.id} flex">
                     <!-- BOUTTON SUPPRIMER -->
                     </div>
@@ -237,4 +256,72 @@ function displayArticleInCart(articles) {
 
         cartArticleListElt.appendChild(listItem);
     });
-}
+};
+
+/**
+ * Affiche le récapitulatif de commande
+ */
+function openOrderSummary() {
+    displayOrderSummaryArticles(cartArticles);
+    orderSummaryElt.style.display = "block";
+    closeCart();
+};
+
+/**
+ * Annulation de la commande -> Vide le panier
+ */
+function cancelOrder() {
+    orderSummaryElt.style.display = "none";
+    orderSummaryListElt.innerHTML = "";
+    clearCart();
+    console.log("Annulation de la commande -> Panier vider");
+};
+
+/**
+ * Valide le paiement, créer une nouvelle order et un nouveau customer avec les informations reçues
+ */
+function processPayment() {
+    const name = document.getElementById("name").value;
+    const lastname = document.getElementById("surname").value;
+    const address = document.getElementById("address").value;
+    const phone = document.getElementById("phone").value;
+
+    const customer = new Customer(name, lastname, address, phone);
+    console.log("Client: ", customer);
+    const order = new Order(customer, cartArticles, calculateTotalCost(cartArticles));
+    console.log("Commande: ", order);
+
+    orderSummaryElt.style.display = "none";
+    document.getElementById("name").value = '';
+    document.getElementById("surname").value = '';
+    document.getElementById("address").value = '';
+    document.getElementById("phone").value = '';
+    clearCart();
+};
+
+/**
+ * Affiche les articles du panier dans le récapitulatif de commande
+ * @param {Array} articles - Article dans le panier
+ */
+function displayOrderSummaryArticles(articles) {
+    const orderSummaryTotalElt = document.getElementsByClassName("order-total")[0];
+    orderSummaryTotalElt.innerHTML = "Total: " + cartPriceElt.innerHTML;
+    articles.forEach(article => {
+        const articleElt = document.createElement("li");
+        articleElt.classList.add("w-11/12", "flex", "justify-between");
+        articleElt.innerHTML = `<p>${article.name}</p><p>Qty: ${article.quantity}</p><p class="font-bold">${article.price * article.quantity}€</p>`;
+        orderSummaryListElt.appendChild(articleElt);
+    });
+};
+
+validateCartElt.addEventListener("click", () => {
+    if(cartArticles.length > 0) {
+        openOrderSummary();
+    } else {
+        console.log("Impossible de valider -> Panier vide !")
+        closeCart();
+    }
+});
+
+paymentOrderButtonElt.addEventListener("click", () => processPayment());
+cancelOrderButtonElt.addEventListener("click", () => cancelOrder());

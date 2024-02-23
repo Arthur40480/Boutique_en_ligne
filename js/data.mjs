@@ -1,5 +1,4 @@
-import { Category } from "./classe/Category.mjs";
-import { Article } from "./classe/Article.mjs";
+import { Article, Category, Order, Customer } from "./Model.mjs";
 
 // Categories:
 const categoryTShirt = new Category("T-shirt");
